@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='pcomfortcloud',
+    name='panasoniceolia',
     version='0.0.14',
     description='Read and change status of Panasonic Comfort Cloud devices',
     long_description=long_description,
@@ -22,11 +22,11 @@ setup(
     ],
     keywords='home automation panasonic climate',
     install_requires=['requests>=2.20.0'],
-    packages=['pcomfortcloud'],
+    packages=['panasoniceolia'],
     package_data={'': ['certificatechain.pem']},
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'pcomfortcloud=pcomfortcloud.__main__:main',
+            'panasoniceolia=panasoniceolia.__main__:main',
         ]
     })

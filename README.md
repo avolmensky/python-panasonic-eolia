@@ -4,7 +4,7 @@ A python module for reading and changing status of panasonic climate devices thr
 ## Command line usage
 
 ```
-usage: pcomfortcloud.py [-h] [-t TOKEN] username password {list,get,set} ...
+usage: panasoniceolia.py [-h] [-t TOKEN] username password {list,get,set} ...
 
 Read or change status of Panasonic Climate devices
 
@@ -28,7 +28,7 @@ optional arguments:
 ```
 
 ```
-usage: pcomfortcloud.py username password get [-h] device
+usage: panasoniceolia.py username password get [-h] device
 
 positional arguments:
   device      device number
@@ -38,7 +38,7 @@ optional arguments:
 ```
 
 ```
-usage: pcomfortcloud.py username password set [-h]
+usage: panasoniceolia.py username password set [-h]
                                              [-p, --power {On,Off}]
                                              [-t, --temperature TEMPERATURE]
                                              [-s, --fanspeed {Auto,Low,LowMid,Mid,HighMid,High}]
@@ -74,9 +74,9 @@ optional arguments:
 
 
 ```python
-import pcomfortcloud
+import panasoniceolia
 
-session = pcomfortcloud.Session('user@example.com', 'mypassword')
+session = panasoniceolia.Session('user@example.com', 'mypassword')
 session.login()
 
 devices = session.get_devices()
@@ -86,12 +86,12 @@ print(devices)
 print(session.get_device(devices[0]['id']))
 
 session.set_device(devices[0]['id'],
-  power = pcomfortcloud.constants.Power.On,
+  power = panasoniceolia.constants.Power.On,
   temperature = 22.0)
 ```
 
 ## PyPi package
-can be found at https://pypi.org/project/pcomfortcloud/
+can be found at https://pypi.org/project/panasoniceolia/
 
 ### How to publish package;
 - `python .\setup.py sdist bdist_wheel`

@@ -1,6 +1,6 @@
 import argparse
 import json
-import pcomfortcloud
+import panasoniceolia
 
 from enum import Enum
 
@@ -30,23 +30,23 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 def main():
-    """ Start pcomfortcloud Comfort Cloud command line """
+    """ Start panasoniceolia Comfort Cloud command line """
 
     parser = argparse.ArgumentParser(
-        description='Read or change status of pcomfortcloud Climate devices')
+        description='Read or change status of panasoniceolia Climate devices')
 
     parser.add_argument(
         'username',
-        help='Username for pcomfortcloud Comfort Cloud')
+        help='Username for panasoniceolia Comfort Cloud')
 
     parser.add_argument(
         'password',
-        help='Password for pcomfortcloud Comfort Cloud')
+        help='Password for panasoniceolia Comfort Cloud')
 
     parser.add_argument(
         '-t', '--token',
         help='File to store token in',
-        default='~/.pcomfortcloud-token')
+        default='~/.panasoniceolia-token')
 
     parser.add_argument(
         '-s', '--skipVerify',
@@ -90,8 +90,8 @@ def main():
     set_parser.add_argument(
         '-p', '--power',
         choices=[
-            pcomfortcloud.constants.Power.On.name,
-            pcomfortcloud.constants.Power.Off.name],
+            panasoniceolia.constants.Power.On.name,
+            panasoniceolia.constants.Power.Off.name],
         help='Power mode')
 
     set_parser.add_argument(
@@ -102,61 +102,61 @@ def main():
     set_parser.add_argument(
         '-f', '--fanSpeed',
         choices=[
-            pcomfortcloud.constants.FanSpeed.Auto.name,
-            pcomfortcloud.constants.FanSpeed.Low.name,
-            pcomfortcloud.constants.FanSpeed.LowMid.name,
-            pcomfortcloud.constants.FanSpeed.Mid.name,
-            pcomfortcloud.constants.FanSpeed.HighMid.name,
-            pcomfortcloud.constants.FanSpeed.High.name],
+            panasoniceolia.constants.FanSpeed.Auto.name,
+            panasoniceolia.constants.FanSpeed.Low.name,
+            panasoniceolia.constants.FanSpeed.LowMid.name,
+            panasoniceolia.constants.FanSpeed.Mid.name,
+            panasoniceolia.constants.FanSpeed.HighMid.name,
+            panasoniceolia.constants.FanSpeed.High.name],
         help='Fan speed')
 
     set_parser.add_argument(
         '-m', '--mode',
         choices=[
-            pcomfortcloud.constants.OperationMode.Auto.name,
-            pcomfortcloud.constants.OperationMode.Cool.name,
-            pcomfortcloud.constants.OperationMode.Dry.name,
-            pcomfortcloud.constants.OperationMode.Heat.name,
-            pcomfortcloud.constants.OperationMode.Fan.name],
+            panasoniceolia.constants.OperationMode.Auto.name,
+            panasoniceolia.constants.OperationMode.Cool.name,
+            panasoniceolia.constants.OperationMode.Dry.name,
+            panasoniceolia.constants.OperationMode.Heat.name,
+            panasoniceolia.constants.OperationMode.Fan.name],
         help='Operation mode')
 
-    set_parser.add_argument(
-        '-e', '--eco',
-        choices=[
-            pcomfortcloud.constants.EcoMode.Auto.name,
-            pcomfortcloud.constants.EcoMode.Quiet.name,
-            pcomfortcloud.constants.EcoMode.Powerful.name],
-        help='Eco mode')
+    # set_parser.add_argument(
+    #     '-e', '--eco',
+    #     choices=[
+    #         panasoniceolia.constants.EcoMode.Auto.name,
+    #         panasoniceolia.constants.EcoMode.Quiet.name,
+    #         panasoniceolia.constants.EcoMode.Powerful.name],
+    #     help='Eco mode')
 
     # set_parser.add_argument(
     #     '--airswingauto',
     #     choices=[
-    #         pcomfortcloud.constants.AirSwingAutoMode.Disabled.name,
-    #         pcomfortcloud.constants.AirSwingAutoMode.AirSwingLR.name,
-    #         pcomfortcloud.constants.AirSwingAutoMode.AirSwingUD.name,
-    #         pcomfortcloud.constants.AirSwingAutoMode.Both.name],
+    #         panasoniceolia.constants.AirSwingAutoMode.Disabled.name,
+    #         panasoniceolia.constants.AirSwingAutoMode.AirSwingLR.name,
+    #         panasoniceolia.constants.AirSwingAutoMode.AirSwingUD.name,
+    #         panasoniceolia.constants.AirSwingAutoMode.Both.name],
     #     help='Automation of air swing')
 
     set_parser.add_argument(
         '-y', '--airSwingVertical',
         choices=[
-            pcomfortcloud.constants.AirSwingUD.Auto.name,
-            pcomfortcloud.constants.AirSwingUD.Down.name,
-            pcomfortcloud.constants.AirSwingUD.DownMid.name,
-            pcomfortcloud.constants.AirSwingUD.Mid.name,
-            pcomfortcloud.constants.AirSwingUD.UpMid.name,
-            pcomfortcloud.constants.AirSwingUD.Up.name],
+            panasoniceolia.constants.AirSwingUD.Auto.name,
+            panasoniceolia.constants.AirSwingUD.Down.name,
+            panasoniceolia.constants.AirSwingUD.DownMid.name,
+            panasoniceolia.constants.AirSwingUD.Mid.name,
+            panasoniceolia.constants.AirSwingUD.UpMid.name,
+            panasoniceolia.constants.AirSwingUD.Up.name],
         help='Vertical position of the air swing')
 
     set_parser.add_argument(
         '-x', '--airSwingHorizontal',
         choices=[
-            pcomfortcloud.constants.AirSwingLR.Auto.name,
-            pcomfortcloud.constants.AirSwingLR.Left.name,
-            pcomfortcloud.constants.AirSwingLR.LeftMid.name,
-            pcomfortcloud.constants.AirSwingLR.Mid.name,
-            pcomfortcloud.constants.AirSwingLR.RightMid.name,
-            pcomfortcloud.constants.AirSwingLR.Right.name],
+            panasoniceolia.constants.AirSwingLR.Auto.name,
+            panasoniceolia.constants.AirSwingLR.Left.name,
+            panasoniceolia.constants.AirSwingLR.LeftMid.name,
+            panasoniceolia.constants.AirSwingLR.Mid.name,
+            panasoniceolia.constants.AirSwingLR.RightMid.name,
+            panasoniceolia.constants.AirSwingLR.Right.name],
         help='Horizontal position of the air swing')
 
     dump_parser = commandparser.add_parser(
@@ -189,7 +189,7 @@ def main():
 
     args = parser.parse_args()
 
-    session = pcomfortcloud.Session(args.username, args.password, args.token, args.raw, args.skipVerify == False)
+    session = panasoniceolia.Session(args.username, args.password, args.token, args.raw, args.skipVerify == False)
     session.login()
     try:
         if args.command == 'list':
@@ -220,25 +220,22 @@ def main():
             kwargs = {}
 
             if args.power is not None:
-                kwargs['power'] = pcomfortcloud.constants.Power[args.power]
+                kwargs['power'] = panasoniceolia.constants.Power[args.power]
 
             if args.temperature is not None:
                 kwargs['temperature'] = args.temperature
 
             if args.fanSpeed is not None:
-                kwargs['fanSpeed'] = pcomfortcloud.constants.FanSpeed[args.fanSpeed]
+                kwargs['fanSpeed'] = panasoniceolia.constants.FanSpeed[args.fanSpeed]
 
             if args.mode is not None:
-                kwargs['mode'] = pcomfortcloud.constants.OperationMode[args.mode]
-
-            if args.eco is not None:
-                kwargs['eco'] = pcomfortcloud.constants.EcoMode[args.eco]
+                kwargs['mode'] = panasoniceolia.constants.OperationMode[args.mode]
 
             if args.airSwingHorizontal is not None:
-                kwargs['airSwingHorizontal'] = pcomfortcloud.constants.AirSwingLR[args.airSwingHorizontal]
+                kwargs['airSwingHorizontal'] = panasoniceolia.constants.AirSwingLR[args.airSwingHorizontal]
 
             if args.airSwingVertical is not None:
-                kwargs['airSwingVertical'] = pcomfortcloud.constants.AirSwingUD[args.airSwingVertical]
+                kwargs['airSwingVertical'] = panasoniceolia.constants.AirSwingUD[args.airSwingVertical]
 
             session.set_device(device['id'], **kwargs)
 
@@ -250,15 +247,15 @@ def main():
 
             print_result(session.dump(device['id']))
 
-        if args.command == 'history':
-            if int(args.device) <= 0 or int(args.device) > len(session.get_devices()):
-                raise Exception("device not found, acceptable device id is from {} to {}".format(1, len(session.get_devices())))
+        # if args.command == 'history':
+        #     if int(args.device) <= 0 or int(args.device) > len(session.get_devices()):
+        #         raise Exception("device not found, acceptable device id is from {} to {}".format(1, len(session.get_devices())))
 
-            device = session.get_devices()[int(args.device) - 1]
+        #     device = session.get_devices()[int(args.device) - 1]
 
-            print_result(session.history(device['id'], args.mode, args.date))
+        #     print_result(session.history(device['id'], args.mode, args.date))
 
-    except pcomfortcloud.ResponseError as ex:
+    except panasoniceolia.ResponseError as ex:
         print(ex.text)
 
 
