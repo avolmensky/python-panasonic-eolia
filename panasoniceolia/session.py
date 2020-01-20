@@ -3,8 +3,11 @@ Panasonic session, using Panasonic Comfort Cloud app api
 '''
 
 from datetime import datetime
+import random
+import string
 import json
 import requests
+import pickle
 import os
 import urllib3
 
@@ -16,6 +19,19 @@ def _validate_response(response):
     if 2 == response.status_code // 100:
         return
     raise ResponseError(response.status_code, response.text)
+
+def _random_string(length):
+    characters = string.ascii_uppercase + string.ascii_lowercase + string.digits
+    return ''.join(random.choice(characters) for i in range(length))
+
+def _remove_keys(keys, deldict):
+    deldict = deldict.copy()
+    for key in keys:
+        try:
+            del(deldict[key])
+        except KeyError:
+            pass
+    return deldict
 
 class Error(Exception):
     ''' Panasonic session error '''
@@ -49,11 +65,11 @@ class Session(object):
 
     """
 
-    def __init__(self, username, password, tokenFileName='~/.panasonic-token', raw=False, verifySsl=True):
+    def __init__(self, username, password, tokenFileName=None, raw=False, verifySsl=True):
         self._username = username
         self._password = password
         self._session = requests.Session()
-        self._groups = None
+        self._tokenFileName = os.path.expanduser(tokenFileName)
         self._devices = None
         self._deviceIndexer = {}
         self._raw = raw
@@ -77,14 +93,21 @@ class Session(object):
 
         response = None
 
-        payload = {
-            "idpw":{
-                "id": self._username,
-                "next_easy":True,
-                "pass": self._password,
-                "terminal_type":3
+        if self._tokenFileName and os.path.exists(self._tokenFileName):
+            with open(self._tokenFileName, 'rb') as cookieFile:
+                self._session.cookies.update(pickle.load(cookieFile))
+
+            payload = {"easy":{}}
+
+        else: 
+            payload = {
+                "idpw":{
+                    "id": self._username,
+                    "next_easy":True,
+                    "pass": self._password,
+                    "terminal_type":3
+                }
             }
-        }
 
         if self._raw: print("--- creating token by authenticating")
 
@@ -103,6 +126,10 @@ class Session(object):
             print(response.text)
             print("--- raw ending    ---\n")
 
+        if self._tokenFileName:
+            with open(self._tokenFileName, 'wb') as cookieFile:
+                pickle.dump(self._session.cookies, cookieFile)
+
     def logout(self):
         """ Logout """
 
@@ -111,7 +138,8 @@ class Session(object):
         return {
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
-            "X-Eolia-Date": now.strftime("%Y-%m-%dT%H:%M:%S")
+            "X-Eolia-Date": now.strftime("%Y-%m-%dT%H:%M:%S"),
+            "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 10; Pixel 3a XL Build/QQ1A.200105.002)"
         }
 
     def get_devices(self):
@@ -229,6 +257,9 @@ class Session(object):
 
 
         _json = json.loads(response.text)
+
+        self._deviceIndexer[id] = _json
+
         return {
             'id': id,
             'parameters': self._read_parameters(_json)
@@ -242,7 +273,15 @@ class Session(object):
             kwargs   : {temperature=float}, {mode=OperationMode}, {fanSpeed=FanSpeed}, {power=Power}, {airSwingVertical=}
         """
 
-        payload = {}
+        if id not in self._deviceIndexer:
+            self.get_device(id)
+
+        remove_keys = ['appliance_id','inside_humidity','inside_temp','outside_temp','operation_priority','aq_value','aq_name','device_errstatus']
+
+        payload = _remove_keys(remove_keys, self._deviceIndexer[id])
+
+        payload['operation_token'] = _random_string(16)
+        payload['silence_control'] = False
 
         if kwargs is not None:
             for key, value in kwargs.items():
@@ -260,13 +299,6 @@ class Session(object):
 
                 if key == 'airSwingVertical' and isinstance(value, constants.AirSwingUD):
                     payload['wind_direction'] = value.value
-        
-        # Set misc other parameters in the payload
-        payload['airquality'] = False # Get 400 error if this is true, not sure what it does
-        payload['nanoex'] = True
-        payload['silence_control'] = False
-        payload['timer_value'] = 0
-        # payload['operation_token'] = 'xxxxxxxxxxxxxxxx' # Not sure what this is, it doesn't seem like it's required
 
         response = None
 
@@ -279,7 +311,6 @@ class Session(object):
         try:
             response = self._session.put(urls.status(id), json=payload, headers=self._headers(), verify=self._verifySsl)
 
-            print(response.status_code)
             if 2 != response.status_code // 100:
                 raise ResponseError(response.status_code, response.text)
 
