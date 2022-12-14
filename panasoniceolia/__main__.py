@@ -1,5 +1,4 @@
 import argparse
-import json
 import panasoniceolia
 
 from enum import Enum
@@ -33,7 +32,7 @@ def main():
     """ Start panasoniceolia command line """
 
     parser = argparse.ArgumentParser(
-        description='Read or change status of panasoniceolia Climate devices')
+        description='Read or change status of Panasonic Eolia Climate devices')
 
     parser.add_argument(
         'username',
@@ -41,7 +40,7 @@ def main():
 
     parser.add_argument(
         'password',
-        help='Password for Panasoniceolia')
+        help='Password for Panasonic Eolia')
 
     parser.add_argument(
         '-t', '--token',

@@ -23,7 +23,6 @@ setup(
     keywords='home automation panasonic eolia climate',
     install_requires=['requests>=2.20.0'],
     packages=['panasoniceolia'],
-    package_data={'': ['certificatechain.pem']},
     zip_safe=False,
     entry_points={
         'console_scripts': [
