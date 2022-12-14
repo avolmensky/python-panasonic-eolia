@@ -30,18 +30,18 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 def main():
-    """ Start panasoniceolia Comfort Cloud command line """
+    """ Start panasoniceolia command line """
 
     parser = argparse.ArgumentParser(
         description='Read or change status of panasoniceolia Climate devices')
 
     parser.add_argument(
         'username',
-        help='Username for panasoniceolia Comfort Cloud')
+        help='Username for Panasonic Eolia')
 
     parser.add_argument(
         'password',
-        help='Password for panasoniceolia Comfort Cloud')
+        help='Password for Panasoniceolia')
 
     parser.add_argument(
         '-t', '--token',

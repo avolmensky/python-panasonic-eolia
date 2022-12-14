@@ -1,5 +1,5 @@
 '''
-Panasonic session, using Panasonic Comfort Cloud app api
+Panasonic session, using Panasonic Eolia app api
 '''
 
 from datetime import datetime
@@ -78,8 +78,7 @@ class Session(object):
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
             self._verifySsl = verifySsl
         else:
-            self._verifySsl = os.path.join(os.path.dirname(__file__),
-                    "certificatechain.pem")
+            self._verifySsl = True
 
     def __enter__(self):
         self.login()

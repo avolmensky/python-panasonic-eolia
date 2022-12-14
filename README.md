@@ -1,5 +1,5 @@
-# python-panasonic-comfort-cloud
-A python module for reading and changing status of panasonic climate devices through Panasonic Comfort Cloud app api
+# python-panasonic-eolia
+A python module for reading and changing status of panasonic climate devices through Panasonic Eolia app api
 
 ## Command line usage
 
@@ -9,8 +9,8 @@ usage: panasoniceolia.py [-h] [-t TOKEN] username password {list,get,set} ...
 Read or change status of Panasonic Climate devices
 
 positional arguments:
-  username              Username for Panasonic Comfort Cloud
-  password              Password for Panasonic Comfort Cloud
+  username              Username for Panasonic Eolia
+  password              Password for Panasonic Eolia
   {list,get,set,dump}   commands
     list                Get a list of all devices
     get                 Get status of a device

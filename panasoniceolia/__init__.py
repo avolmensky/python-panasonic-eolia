@@ -1,5 +1,5 @@
 """
-A python module for reading and changing status of panasonic climate devices through Panasonic Comfort Cloud app api
+A python module for reading and changing status of panasonic climate devices through Panasonic Eolia app api
 """
 
 __all__ = [
