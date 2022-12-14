@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='panasoniceolia',
-    version='0.0.1',
+    version='0.0.2',
     description='Read and change status of Panasonic Eolia devices',
     long_description=long_description,
     long_description_content_type="text/markdown",
