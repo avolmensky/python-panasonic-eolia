@@ -69,7 +69,7 @@ class Session(object):
         self._username = username
         self._password = password
         self._session = requests.Session()
-        self._tokenFileName = os.path.expanduser(tokenFileName)
+        self._tokenFileName = os.path.expanduser(tokenFileName) if tokenFileName else None
         self._devices = None
         self._deviceIndexer = {}
         self._raw = raw
