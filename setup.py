@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='panasoniceolia',
-    version='0.0.5',
+    version='0.0.6',
     description='Read and change status of Panasonic Eolia devices',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -17,8 +17,7 @@ setup(
     classifiers=[
        'Topic :: Home Automation',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.10',
     ],
     keywords='home automation panasonic eolia climate',
     install_requires=['requests>=2.20.0'],

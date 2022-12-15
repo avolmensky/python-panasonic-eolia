@@ -6,7 +6,7 @@ class Power(Enum):
 
 class OperationMode(Enum):
     Auto = "Auto"
-    Dry = "CoolDehumidifying"
+    Dry = "Dehumidifying"
     Cool = "Cooling"
     Heat = "Heating"
     Fan = "Blast"
