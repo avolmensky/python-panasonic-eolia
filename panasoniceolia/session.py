@@ -306,6 +306,9 @@ class Session(object):
         try:
             response = self._session.put(urls.status(id), json=payload, headers=self._headers(), verify=self._verifySsl)
 
+            _json = json.loads(response.text)
+            self._operation_token = _json['operation_token']
+
             if 2 != response.status_code // 100:
                 raise ResponseError(response.status_code, response.text)
 
@@ -318,10 +321,6 @@ class Session(object):
             print("--- raw in beginning ---")
             print(response.text)
             print("--- raw in ending    ---\n")
-
-        _json = json.loads(response.text)
-
-        self._operation_token = _json['operation_token']
 
         return True
 
