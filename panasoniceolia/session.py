@@ -1,10 +1,8 @@
 '''
-Panasonic session, using Panasonic Eolia app api
+Panasonic session, using Panasonic Comfort Cloud app api
 '''
 
 from datetime import datetime
-import random
-import string
 import json
 import requests
 import pickle
@@ -19,10 +17,6 @@ def _validate_response(response):
     if 2 == response.status_code // 100:
         return
     raise ResponseError(response.status_code, response.text)
-
-def _random_string(length):
-    characters = string.ascii_uppercase + string.ascii_lowercase + string.digits
-    return ''.join(random.choice(characters) for i in range(length))
 
 def _remove_keys(keys, deldict):
     deldict = deldict.copy()
@@ -73,6 +67,7 @@ class Session(object):
         self._devices = None
         self._deviceIndexer = {}
         self._raw = raw
+        self._operation_token = None
 
         if verifySsl == False:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -89,7 +84,6 @@ class Session(object):
 
     def login(self):
         """ Login to eolia app api """
-
         response = None
 
         if self._tokenFileName and os.path.exists(self._tokenFileName):
@@ -272,14 +266,13 @@ class Session(object):
             kwargs   : {temperature=float}, {mode=OperationMode}, {fanSpeed=FanSpeed}, {power=Power}, {airSwingVertical=}
         """
 
-        if id not in self._deviceIndexer:
-            self.get_device(id)
+        self.get_device(id)
 
         remove_keys = ['appliance_id','inside_humidity','inside_temp','outside_temp','operation_priority','aq_value','aq_name','device_errstatus']
 
         payload = _remove_keys(remove_keys, self._deviceIndexer[id])
 
-        payload['operation_token'] = _random_string(16)
+        payload['operation_token'] = self._operation_token
         payload['silence_control'] = False
 
         if kwargs is not None:
@@ -298,6 +291,9 @@ class Session(object):
 
                 if key == 'airSwingVertical' and isinstance(value, constants.AirSwingUD):
                     payload['wind_direction'] = value.value
+
+        if payload['operation_mode'] == constants.OperationMode.Off.value:
+            payload['operation_mode'] = constants.OperationMode.Auto.value
 
         response = None
 
@@ -324,6 +320,8 @@ class Session(object):
             print("--- raw in ending    ---\n")
 
         _json = json.loads(response.text)
+
+        self._operation_token = _json['operation_token']
 
         return True
 
