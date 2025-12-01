@@ -1,4 +1,7 @@
 # python-panasonic-eolia
+
+> ⚠️ **DEPRECATED**: This project is no longer maintained. No further updates or support will be provided.
+
 A python module for reading and changing status of panasonic climate devices through Panasonic Eolia app api
 
 ## Command line usage
