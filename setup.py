@@ -15,6 +15,7 @@ setup(
     author='avolmensky',
     license='MIT',
     classifiers=[
+       'Development Status :: 7 - Inactive',
        'Topic :: Home Automation',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.10',
